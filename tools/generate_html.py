@@ -222,12 +222,12 @@ html_template = f"""<!DOCTYPE html>
         
         .symbology-box {{
             background: #e8e8e8;
-            padding: 25px;
+            padding: 35px;
             flex: 1;
         }}
-        .symbology-title {{ font-size: 3.2rem; font-weight: bold; margin-bottom: 25px; text-transform: uppercase; }}
-        .symbology-item {{ display: flex; align-items: center; gap: 20px; margin-bottom: 20px; font-size: 2rem; }}
-        .symb-color {{ width: 70px; height: 40px; border: 1px solid #000; flex-shrink: 0; }}
+        .symbology-title {{ font-size: 4rem; font-weight: bold; margin-bottom: 35px; text-transform: uppercase; }}
+        .symbology-item {{ display: flex; align-items: center; gap: 24px; margin-bottom: 28px; font-size: 2.6rem; }}
+        .symb-color {{ width: 90px; height: 52px; border: 1px solid #000; flex-shrink: 0; }}
         
         .yacuwarmi-box {{
             border: 2px solid #000;
