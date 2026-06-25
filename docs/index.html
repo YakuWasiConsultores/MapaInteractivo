@@ -90,8 +90,25 @@
             flex: 1;
         }
         .symbology-title { font-size: 4rem; font-weight: bold; margin-bottom: 35px; text-transform: uppercase; }
-        .symbology-item { display: flex; align-items: center; gap: 24px; margin-bottom: 28px; font-size: 2.6rem; }
+        .symbology-item {
+            display: flex; align-items: center; gap: 24px; margin-bottom: 28px; font-size: 2.6rem;
+            cursor: pointer; user-select: none; transition: opacity 0.25s ease;
+            border-radius: 8px; padding: 8px 12px;
+        }
+        .symbology-item:hover { background: rgba(0,0,0,0.07); }
+        .symbology-item.layer-off { opacity: 0.35; }
+        .symbology-item .symb-check {
+            width: 36px; height: 36px; border: 3px solid #555; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; font-size: 2rem; color: #1e8449; transition: all 0.2s ease;
+            background: #fff;
+        }
+        .symbology-item .symb-check.checked { background: #d5f5e3; border-color: #1e8449; }
         .symb-color { width: 90px; height: 52px; border: 1px solid #000; flex-shrink: 0; }
+        @media print {
+            .symbology-item.layer-off { display: none; }
+            .symbology-item .symb-check { display: none; }
+        }
         
         .yacuwarmi-box {
             border: 2px solid #000;
@@ -392,15 +409,15 @@
                 <div class="inset-map"><img src="inset_napo.png" alt="Napo"></div>
             </div>
             
-            <div class="symbology-box">
+            <div class="symbology-box" id="symbology-box">
                 <div class="symbology-title">SIMBOLOGÍA</div>
-                <div class="symbology-item"><div class="symb-color" style="background: #a0522d;"></div> Comunidades del corredor</div>
-                <div class="symbology-item"><div class="symb-color" style="background: #f5b7b1; border-color: transparent;"></div> Posibles comunidades a integrar</div>
-                <div class="symbology-item"><div class="symb-color kba-pattern" style="border-color: #f39c12;"></div> Ecu 52 kba</div>
-                <div class="symbology-item"><div class="symb-color" style="background: #1e8449;"></div> Ecu_25</div>
-                <div class="symbology-item"><div class="symb-color" style="background: transparent; border: 3px dashed #e74c3c;"></div> Corredor NorOriental</div>
-                <div class="symbology-item"><div class="symb-color" style="background: #fff; border: 1px solid #000;"></div> Napo</div>
-                <div class="symbology-item"><div class="symb-color" style="background: #a9dfbf;"></div> SNAP</div>
+                <div class="symbology-item" data-layer="communities" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #a0522d;"></div> Comunidades del corredor</div>
+                <div class="symbology-item" data-layer="posibles" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #f5b7b1; border-color: transparent;"></div> Posibles comunidades a integrar</div>
+                <div class="symbology-item" data-layer="kba" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color kba-pattern" style="border-color: #f39c12;"></div> Ecu 52 kba</div>
+                <div class="symbology-item" data-layer="ecu25" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #1e8449;"></div> Ecu_25</div>
+                <div class="symbology-item" data-layer="corredorNor" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: transparent; border: 3px dashed #e74c3c;"></div> Corredor NorOriental</div>
+                <div class="symbology-item" data-layer="napo" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #fff; border: 1px solid #000;"></div> Napo</div>
+                <div class="symbology-item" data-layer="snap" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #a9dfbf;"></div> SNAP</div>
             </div>
             
             <div class="yacuwarmi-box">
@@ -487,29 +504,31 @@
             }
         }
 
-        L.geoJSON(napoData, {
+        var napoLayer = L.geoJSON(napoData, {
             style: { color: '#000', weight: 1, fillColor: '#ffffff', fillOpacity: 1 }
         }).addTo(map);
 
-        L.geoJSON(snapData, {
+        var snapLayer = L.geoJSON(snapData, {
             style: { color: '#7dcea0', weight: 1, fillColor: '#a9dfbf', fillOpacity: 0.8 },
             onEachFeature: labelPolygons
         }).addTo(map);
+        var snapLabels = [];
 
-        L.geoJSON(ecu25Data, {
+        var ecu25Layer = L.geoJSON(ecu25Data, {
             style: { color: '#145a32', weight: 1, fillColor: '#1e8449', fillOpacity: 0.9 },
             onEachFeature: labelPolygons
         }).addTo(map);
+        var ecu25Labels = [];
 
-        L.geoJSON(corredorNorData, {
+        var corredorNorLayer = L.geoJSON(corredorNorData, {
             style: { color: '#e74c3c', weight: 6, dashArray: '12, 10', fillOpacity: 0 }
         }).addTo(map);
         
-        L.geoJSON(kbaData, {
+        var kbaLayer = L.geoJSON(kbaData, {
             style: { color: '#e67e22', weight: 2, fillColor: 'url(#hatch-kba)', fillOpacity: 0.5 }
         }).addTo(map);
         
-        L.geoJSON(posiblesData, {
+        var posiblesLayer = L.geoJSON(posiblesData, {
             style: { color: '#f5b7b1', weight: 1, fillColor: '#f5b7b1', fillOpacity: 0.9 }
         }).addTo(map);
 
@@ -610,7 +629,9 @@
             }).addTo(map);
         }
 
-        L.geoJSON(communitiesData, {
+        var commLabelMarkers = [];
+        var commCalloutElements = [];
+        var communitiesLayer = L.geoJSON(communitiesData, {
             style: function(feature) {
                 return { color: '#fff', weight: 2, fillColor: '#a0522d', fillOpacity: 0.8 };
             },
@@ -626,17 +647,58 @@
                         iconSize: null,
                         iconAnchor: [22, 22]
                     });
-                    L.marker(latlng, {icon: icon, interactive: false}).addTo(map);
+                    var labelMk = L.marker(latlng, {icon: icon, interactive: false}).addTo(map);
+                    commLabelMarkers.push(labelMk);
                     
                     drawCallout(feature);
+                    // Store callout refs for toggle
+                    var cid = feature.properties.id;
+                    if(callouts[cid]) {
+                        if(callouts[cid].marker) commCalloutElements.push(callouts[cid].marker);
+                        if(callouts[cid].line) commCalloutElements.push(callouts[cid].line);
+                    }
                 }
             }
         }).addTo(map);
         
         // Corredor (Yellow/Orange dashed) - Represents Corredor NorOriental or main Corredor
-        L.geoJSON(corridorData, {
+        var corridorLayer = L.geoJSON(corridorData, {
             style: { color: '#f39c12', weight: 12, dashArray: '15, 15', fillColor: 'transparent', opacity: 1.0 }
         }).addTo(map);
+
+        // ============ INTERACTIVE SYMBOLOGY TOGGLE ============
+        var mapLayers = {
+            'communities': { layer: communitiesLayer, extras: commLabelMarkers.concat(commCalloutElements).concat([corridorLayer]) },
+            'posibles':    { layer: posiblesLayer, extras: [] },
+            'kba':         { layer: kbaLayer, extras: [] },
+            'ecu25':       { layer: ecu25Layer, extras: [] },
+            'corredorNor': { layer: corredorNorLayer, extras: [] },
+            'napo':        { layer: napoLayer, extras: [] },
+            'snap':        { layer: snapLayer, extras: [] }
+        };
+
+        function toggleLayer(el) {
+            var layerName = el.getAttribute('data-layer');
+            var entry = mapLayers[layerName];
+            if (!entry) return;
+            var check = el.querySelector('.symb-check');
+            var isOn = check.classList.contains('checked');
+            if (isOn) {
+                // Turn OFF
+                check.classList.remove('checked');
+                check.innerHTML = '';
+                el.classList.add('layer-off');
+                if (entry.layer && map.hasLayer(entry.layer)) map.removeLayer(entry.layer);
+                entry.extras.forEach(function(m) { if (map.hasLayer(m)) map.removeLayer(m); });
+            } else {
+                // Turn ON
+                check.classList.add('checked');
+                check.innerHTML = '✔';
+                el.classList.remove('layer-off');
+                if (entry.layer && !map.hasLayer(entry.layer)) map.addLayer(entry.layer);
+                entry.extras.forEach(function(m) { if (!map.hasLayer(m)) map.addLayer(m); });
+            }
+        }
         
         // Labels
         var parkIcon = L.divIcon({
