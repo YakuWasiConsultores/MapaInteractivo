@@ -3,7 +3,7 @@
 Mapa interactivo del **Corredor de Conectividad Comunitaria** de la provincia de
 Napo, Ecuador. Publicado como sitio estático en GitHub Pages.
 
-🌐 **[Ver el mapa en vivo](https://TU-USUARIO.github.io/TU-REPOSITORIO/)**
+🌐 **[Ver el mapa en vivo](https://YakuWasiConsultores.github.io/MapaInteractivo/)**
 
 ## Estructura del proyecto
 
@@ -29,11 +29,11 @@ El sitio se sirve directamente desde la carpeta `docs/` en la rama `main`.
 
 ### Configuración inicial en GitHub
 
-1. Crear un repositorio en GitHub
-2. Vincular el repositorio local:
+1. El repositorio ya está vinculado a:
+   `https://github.com/YakuWasiConsultores/MapaInteractivo.git`
+2. Hacer push:
 
 ```bash
-git remote add origin https://github.com/TU-USUARIO/TU-REPOSITORIO.git
 git push -u origin main
 ```
 
