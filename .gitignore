@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# Build output (local builds)
+dist/
+
+# PDF exports
+*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# QGIS extracted files
+qgz_extracted/
+
+# Legacy documentation
+docs_legacy/
