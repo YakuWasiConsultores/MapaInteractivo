@@ -59,15 +59,32 @@ corridor_geojson = {
 }
 
 communities_features = []
+used_species = set()  # Track assigned species to avoid duplicates
 for c in communities:
     c_id = str(c['id'])
     
     inat = inat_data['community_species'].get(c_id, {})
-    fauna = inat.get('fauna_species', [])[:4]
+    fauna = inat.get('fauna_species', [])
     
-    top_species_name = fauna[0]['name'] if fauna else "Sin registro"
-    top_species_common = fauna[0]['common_name'] if fauna else ""
-    top_species_img = fauna[0].get('photo_url', '') if fauna else ""
+    # Pick the first fauna species not already assigned to another community
+    chosen = None
+    for sp in fauna:
+        if sp['name'] not in used_species:
+            chosen = sp
+            break
+    # Fallback: if all fauna species are taken, use the first one anyway
+    if chosen is None and fauna:
+        chosen = fauna[0]
+    
+    if chosen:
+        top_species_name = chosen['name']
+        top_species_common = chosen['common_name']
+        top_species_img = chosen.get('photo_url', '')
+        used_species.add(top_species_name)
+    else:
+        top_species_name = "Sin registro"
+        top_species_common = ""
+        top_species_img = ""
     
     feat = {
         "type": "Feature",
