@@ -1,5 +1,7 @@
 import argparse
 import json
+import re
+import unicodedata
 from pathlib import Path
 
 
@@ -30,6 +32,31 @@ with (data_dir / "corridor_polygon.json").open("r", encoding="utf-8") as f:
 
 with (data_dir / "inaturalist_data.json").open("r", encoding="utf-8") as f:
     inat_data = json.load(f)
+
+
+def normalize_community_name(value):
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    value = value.upper().replace('"', "")
+    value = re.sub(r"[^A-Z0-9]+", " ", value)
+    value = re.sub(r"\bCHALLWAYAKU\b", "CHALLUAYAKU", value)
+    return re.sub(r"\s+", " ", value).strip()
+
+
+inat_by_community_name = {
+    normalize_community_name(community.get("name", "")): community
+    for community in inat_data["community_species"].values()
+}
+
+
+def local_taxon_image(taxon_id):
+    if not taxon_id:
+        return ""
+    image_name = f"inat_taxon_{taxon_id}_medium"
+    for suffix in (".jpg", ".jpeg", ".png", ".webp"):
+        candidate = base_dir / "docs" / "assets" / "images" / f"{image_name}{suffix}"
+        if candidate.exists():
+            return f"assets/images/{candidate.name}"
+    return ""
 
 # Read extra layers
 def load_geojson(path):
@@ -63,13 +90,17 @@ used_species = set()  # Track assigned species to avoid duplicates
 for c in communities:
     c_id = str(c['id'])
     
-    inat = inat_data['community_species'].get(c_id, {})
+    inat = inat_by_community_name.get(
+        normalize_community_name(c["name"]),
+        inat_data['community_species'].get(c_id, {})
+    )
     fauna = inat.get('fauna_species', [])
     
     # Pick the first fauna species not already assigned to another community
     chosen = None
     for sp in fauna:
-        if sp['name'] not in used_species:
+        species_key = sp.get('taxon_id') or sp.get('name')
+        if species_key not in used_species:
             chosen = sp
             break
     # Fallback: if all fauna species are taken, use the first one anyway
@@ -79,8 +110,8 @@ for c in communities:
     if chosen:
         top_species_name = chosen['name']
         top_species_common = chosen['common_name']
-        top_species_img = chosen.get('photo_url', '')
-        used_species.add(top_species_name)
+        top_species_img = local_taxon_image(chosen.get('taxon_id')) or chosen.get('photo_url', '')
+        used_species.add(chosen.get('taxon_id') or top_species_name)
     else:
         top_species_name = "Sin registro"
         top_species_common = ""

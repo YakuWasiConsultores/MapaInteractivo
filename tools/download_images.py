@@ -27,7 +27,8 @@ for cid, comm in inat_data['community_species'].items():
             url = sp.get('photo_url')
             if url and url.startswith('http'):
                 filename = os.path.basename(urlparse(url).path)
-                safe_name = f"inat_{cid}_{sp.get('id', '')}_{filename}"
+                taxon_key = sp.get('taxon_id') or sp.get('id') or sp.get('name', 'species')
+                safe_name = f"inat_{cid}_{taxon_key}_{filename}"
                 local_path = os.path.join(assets_dir, safe_name)
                 if not os.path.exists(local_path):
                     try:
