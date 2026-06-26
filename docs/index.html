@@ -661,14 +661,11 @@
             }
         }).addTo(map);
         
-        // Corredor (Yellow/Orange dashed) - Represents Corredor NorOriental or main Corredor
-        var corridorLayer = L.geoJSON(corridorData, {
-            style: { color: '#c0392b', weight: 12, dashArray: '15, 15', fillColor: 'transparent', opacity: 1.0 }
-        }).addTo(map);
+
 
         // ============ INTERACTIVE SYMBOLOGY TOGGLE ============
         var mapLayers = {
-            'communities': { layer: communitiesLayer, extras: commLabelMarkers.concat(commCalloutElements).concat([corridorLayer]) },
+            'communities': { layer: communitiesLayer, extras: commLabelMarkers.concat(commCalloutElements) },
             'posibles':    { layer: posiblesLayer, extras: [] },
             'kba':         { layer: kbaLayer, extras: [] },
             'ecu25':       { layer: ecu25Layer, extras: [] },
