@@ -382,8 +382,8 @@ html_template = f"""<!DOCTYPE html>
         .kba-pattern {{
             background: repeating-linear-gradient(
                 45deg,
-                #c0392b,
-                #c0392b 5px,
+                #e67e22,
+                #e67e22 5px,
                 transparent 5px,
                 transparent 10px
             );
@@ -491,7 +491,7 @@ html_template = f"""<!DOCTYPE html>
                 <div class="symbology-title">SIMBOLOGÍA</div>
                 <div class="symbology-item" data-layer="communities" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #a0522d;"></div> Comunidades del corredor</div>
                 <div class="symbology-item" data-layer="posibles" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #f5b7b1; border-color: transparent;"></div> Posibles comunidades a integrar</div>
-                <div class="symbology-item" data-layer="kba" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color kba-pattern" style="border-color: #c0392b;"></div> Ecu 52 kba</div>
+                <div class="symbology-item" data-layer="kba" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color kba-pattern" style="border-color: #e67e22;"></div> Ecu 52 kba</div>
                 <div class="symbology-item" data-layer="ecu25" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #1e8449;"></div> Ecu_25</div>
                 <div class="symbology-item" data-layer="corredorNor" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: transparent; border: 3px dashed #0057b8;"></div> Corredor NorOriental</div>
                 <div class="symbology-item" data-layer="napo" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #fff; border: 1px solid #000;"></div> Napo</div>
@@ -621,7 +621,7 @@ html_template += """
         }).addTo(map);
         
         var kbaLayer = L.geoJSON(kbaData, {
-            style: { color: '#c0392b', weight: 4, fillColor: 'url(#hatch-kba)', fillOpacity: 0.5 }
+            style: { color: '#e67e22', weight: 4, fillColor: 'url(#hatch-kba)', fillOpacity: 0.5 }
         }).addTo(map);
         
         var posiblesLayer = L.geoJSON(posiblesData, {
