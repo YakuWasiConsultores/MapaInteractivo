@@ -462,7 +462,7 @@ html_template = f"""<!DOCTYPE html>
                 <div class="symbology-item" data-layer="posibles" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #f5b7b1; border-color: transparent;"></div> Posibles comunidades a integrar</div>
                 <div class="symbology-item" data-layer="kba" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color kba-pattern" style="border-color: #f39c12;"></div> Ecu 52 kba</div>
                 <div class="symbology-item" data-layer="ecu25" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #1e8449;"></div> Ecu_25</div>
-                <div class="symbology-item" data-layer="corredorNor" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: transparent; border: 3px dashed #e74c3c;"></div> Corredor NorOriental</div>
+                <div class="symbology-item" data-layer="corredorNor" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: transparent; border: 3px dashed #0057b8;"></div> Corredor NorOriental</div>
                 <div class="symbology-item" data-layer="napo" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #fff; border: 1px solid #000;"></div> Napo</div>
                 <div class="symbology-item" data-layer="snap" onclick="toggleLayer(this)"><div class="symb-check checked">✔</div><div class="symb-color" style="background: #a9dfbf;"></div> SNAP</div>
             </div>
@@ -586,7 +586,7 @@ html_template += """
         var ecu25Labels = [];
 
         var corredorNorLayer = L.geoJSON(corredorNorData, {
-            style: { color: '#e74c3c', weight: 6, dashArray: '12, 10', fillOpacity: 0 }
+            style: { color: '#0057b8', weight: 6, dashArray: '12, 10', fillOpacity: 0 }
         }).addTo(map);
         
         var kbaLayer = L.geoJSON(kbaData, {
