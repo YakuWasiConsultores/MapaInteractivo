@@ -621,7 +621,7 @@ html_template += """
         }).addTo(map);
         
         var kbaLayer = L.geoJSON(kbaData, {
-            style: { color: '#e67e22', weight: 4, fillColor: 'url(#hatch-kba)', fillOpacity: 0.5 }
+            style: { color: '#e67e22', weight: 6, fillColor: 'url(#hatch-kba)', fillOpacity: 0.5 }
         }).addTo(map);
         
         var posiblesLayer = L.geoJSON(posiblesData, {
